@@ -22,34 +22,6 @@ Welcome to my personal portfolio website. This project showcases my skills, proj
 
 ---
 
-## ⚡ Technologies Used
-
-| Layer | Technologies |
-|---|---|
-| Frontend | React, TypeScript, Tailwind CSS, Framer Motion |
-| Backend / Contact | FormSubmit (no server required) |
-| Mobile / Embedded | Flutter, Kotlin, STM32 |
-| Other Tools | Git, VSCode, Netlify |
-
----
-
-## 📂 Project Structure
-
-```
-My-Portfolio/
-├── public/             # Static assets
-├── src/
-│   ├── components/     # React components
-│   ├── pages/          # Page components
-│   ├── App.tsx         # Main App component
-│   └── main.tsx        # Entry point
-├── package.json
-├── tailwind.config.js
-└── vite.config.ts
-```
-
----
-
 ## 🚀 Getting Started
 
 ### 1. Clone the repository
