@@ -20,18 +20,17 @@ const achievements: Achievement[] = [
     date: 'June 2024',
     description:
       'Successfully completed a workshop and received a certificate from the Vice Chancellor of Dhaka University.',
-    image:
-      'https://images.pexels.com/photos/1181395/pexels-photo-1181395.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+    image: '/llmworkshop.jpeg',
   },
   {
-    id: 2,
-    title: 'Scholarship Awarded',
-    organization: 'Elementary School',
-    date: 'Class 5',
-    description: 'Received a scholarship for academic excellence in Class 5.',
-    image:
-      'https://images.pexels.com/photos/5212324/pexels-photo-5212324.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-  },
+  id: 2,
+  title: 'BD App Ideathon Finalist',
+  organization: 'Robi Axiata Limited',
+  date: '2024',
+  description: 'Finalist in BD App Ideathon with the project "Expense Fusion" app, presented by Robi.',
+  image:
+    '/idea.jpeg',
+},
 ];
 
 const Achievements: React.FC = () => {
@@ -67,21 +66,39 @@ const Achievements: React.FC = () => {
 };
 
 const AchievementCard: React.FC<{ achievement: Achievement }> = ({ achievement }) => (
-  <div className="w-full px-4">
-    <div className="bg-white dark:bg-dark-700 rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
-      <div className="md:w-2/5 h-64 md:h-auto relative">
-        <img src={achievement.image} alt={achievement.title} className="w-full h-full object-cover" />
+  <div className="w-full">
+    <div className="bg-white dark:bg-dark-700 rounded-xl shadow-md overflow-hidden flex flex-col">
+      
+      {/* Image Top */}
+      <div className="relative w-full">
+        <img
+          src={achievement.image}
+          alt={achievement.title}
+          className="w-full h-38 object-cover"
+        />
+
         <div className="absolute top-4 left-4 bg-primary-600 text-white p-2 rounded-full">
           <Trophy size={20} />
         </div>
       </div>
-      <div className="md:w-3/5 p-6 flex flex-col justify-center">
-        <span className="text-sm text-primary-600 dark:text-primary-400 font-medium mb-1">
+
+      {/* Content Bottom */}
+      <div className="p-6">
+        <span className="text-sm text-primary-600 dark:text-primary-400 font-medium mb-1 block">
           {achievement.date}
         </span>
-        <h3 className="text-xl font-bold mb-1">{achievement.title}</h3>
-        <h4 className="text-lg text-gray-700 dark:text-gray-300 mb-4">{achievement.organization}</h4>
-        <p className="text-gray-600 dark:text-gray-400">{achievement.description}</p>
+
+        <h3 className="text-xl font-bold mb-2">
+          {achievement.title}
+        </h3>
+
+        <h4 className="text-lg text-gray-700 dark:text-gray-300 mb-4">
+          {achievement.organization}
+        </h4>
+
+        <p className="text-gray-600 dark:text-gray-400">
+          {achievement.description}
+        </p>
       </div>
     </div>
   </div>

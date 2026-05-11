@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Calendar, MapPin } from 'lucide-react';
@@ -9,11 +9,12 @@ const Experience: React.FC = () => {
       company: 'Quail inc.',
       companyLink: 'https://www.quail.co.jp/',
       position: 'Software Engineering Intern',
-      duration: 'March 4 – March 18, 2026',
+      duration: 'March 2 – March 19, 2026',
       location: 'Kagoshima, Japan',
       description:
-          'Contributed to a real-world industrial Flutter application integrating WebSocket-based real-time communication with RFID systems. Implemented live tracking features, improved data synchronization, and ensured reliable device connectivity in a production environment.',
+        'Contributed to a real-world industrial Flutter application integrating WebSocket-based real-time communication with RFID systems. Implemented live tracking features, improved data synchronization, and ensured reliable device connectivity in a production environment.',
       technologies: ['Flutter', 'Dart', 'WebSocket', 'RFID', 'IoT', 'Kotlin'],
+      images: ['/q1.png', '/q2.png', '/q3.png'],
     },
     {
       company: 'Genmorphics AI Solutions',
@@ -22,7 +23,7 @@ const Experience: React.FC = () => {
       duration: 'Oct 2023 – Dec 2025',
       location: 'Remote (Bangladesh)',
       description:
-        'Worked on multiple AI projects like IB Coding, Project X, and Project Puzzle. Annotated data and evaluated AI model responses to improve performance in tasks such as reasoning, coding, and image-based Q&A.',
+        'Worked on multiple AI projects like IB Coding, Project X, and Project Puzzle. Annotated data and evaluated AI model responses.',
       technologies: ['Python', 'Prompt Engineering', 'Data Annotation', 'AI Evaluation'],
     },
     {
@@ -31,8 +32,8 @@ const Experience: React.FC = () => {
       duration: 'Jan 2022 – Feb 2026',
       location: 'Dhaka, Bangladesh',
       description:
-        'Developed multiple web and mobile applications including an e-commerce platform (Swapno), a university management app (Current - University BD), and a healthcare system using Spring Boot and React. Built embedded systems projects including STM32 bootloader implementations, and developed machine learning models using Python for real-world problem solving, including chest X-ray analysis.',
-      technologies: ['Kotlin', 'Java', 'Flutter', 'Firebase', 'Spring Boot', 'React', 'FastAPI', 'STM32', 'Scikit-learn'],
+        'Developed multiple web and mobile applications including e-commerce, university apps, healthcare systems, and ML projects.',
+      technologies: ['Kotlin', 'Java', 'Flutter', 'Firebase', 'Spring Boot', 'React'],
     },
     {
       company: 'Clients from Australia & UK',
@@ -40,9 +41,9 @@ const Experience: React.FC = () => {
       duration: '2021 – 2025',
       location: 'Dhaka, Bangladesh',
       description:
-        'Developed educational and client-based projects including Android applications and machine learning solutions using Python.',
-      technologies: ['Kotlin', 'Android', 'Firebase Firestore', 'Python', 'Scikit-learn'],
-    }
+        'Developed educational and client-based Android and ML projects and assignments.',
+      technologies: ['Kotlin', 'Android', 'Firebase Firestore', 'Python'],
+    },
   ];
 
   return (
@@ -78,6 +79,7 @@ interface ExperienceItemProps {
     location: string;
     description: string;
     technologies: string[];
+    images?: string[];
   };
   index: number;
 }
@@ -88,6 +90,21 @@ const ExperienceItem: React.FC<ExperienceItemProps> = ({ job, index }) => {
     threshold: 0.1,
   });
 
+  // 🔥 slider state (ONLY first job uses it)
+  const [currentImage, setCurrentImage] = useState(0);
+
+  useEffect(() => {
+    if (!job.images || job.images.length === 0) return;
+
+    const interval = setInterval(() => {
+      setCurrentImage((prev) =>
+        prev === job.images!.length - 1 ? 0 : prev + 1
+      );
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, [job.images]);
+
   return (
     <motion.div
       ref={ref}
@@ -97,18 +114,32 @@ const ExperienceItem: React.FC<ExperienceItemProps> = ({ job, index }) => {
       className="timeline-item"
     >
       <div className="bg-white dark:bg-dark-700 p-6 rounded-lg shadow-md mb-8 ml-6">
+
+        {/* 🔥 IMAGE SLIDER (ONLY FOR QUAIL INTERN) */}
+        {job.images && (
+          <div className="mb-4 w-full overflow-hidden rounded-lg">
+            <img
+              src={job.images[currentImage]}
+              alt="experience"
+              className="w-full h-56 sm:h-64 md:h-72 object-cover transition-all duration-500"
+            />
+          </div>
+        )}
+
+        {/* HEADER */}
         <div className="flex flex-wrap justify-between items-start mb-4">
           <div>
             <h3 className="text-xl font-bold text-primary-600 dark:text-primary-400 mb-1">
               {job.position}
             </h3>
+
             <h4 className="text-lg font-semibold mb-2">
               {job.companyLink ? (
                 <a
                   href={job.companyLink}
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="text-inherit hover:text-primary-700 dark:hover:text-primary-300"
+                  className="hover:text-primary-600"
                 >
                   {job.company}
                 </a>
@@ -130,14 +161,16 @@ const ExperienceItem: React.FC<ExperienceItemProps> = ({ job, index }) => {
           </div>
         </div>
 
+        {/* DESCRIPTION */}
         <p className="text-gray-700 dark:text-gray-300 mb-4">
           {job.description}
         </p>
 
+        {/* TECH */}
         <div className="flex flex-wrap gap-2">
-          {job.technologies.map((tech, techIndex) => (
+          {job.technologies.map((tech, i) => (
             <span
-              key={techIndex}
+              key={i}
               className="px-3 py-1 text-sm bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-full"
             >
               {tech}
