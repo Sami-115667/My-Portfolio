@@ -25,6 +25,8 @@ const Experience: React.FC = () => {
       description:
         'Worked on multiple AI projects like IB Coding, Project X, and Project Puzzle. Annotated data and evaluated AI model responses.',
       technologies: ['Python', 'Prompt Engineering', 'Data Annotation', 'AI Evaluation'],
+      image: '/genmorphics_work.png',
+      imageAlt: 'Genmorphics AI Solutions certificate',
     },
     {
       company: 'Academic & Personal Projects',
@@ -38,7 +40,7 @@ const Experience: React.FC = () => {
     {
       company: 'Clients from Australia & UK',
       position: 'Freelance Developer',
-      duration: '2021 – 2025',
+      duration: '2024 – 2026',
       location: 'Dhaka, Bangladesh',
       description:
         'Developed educational and client-based Android and ML projects and assignments.',
@@ -80,6 +82,8 @@ interface ExperienceItemProps {
     description: string;
     technologies: string[];
     images?: string[];
+    image?: string;
+    imageAlt?: string;
   };
   index: number;
 }
@@ -126,56 +130,70 @@ const ExperienceItem: React.FC<ExperienceItemProps> = ({ job, index }) => {
           </div>
         )}
 
-        {/* HEADER */}
-        <div className="flex flex-wrap justify-between items-start mb-4">
-          <div>
-            <h3 className="text-xl font-bold text-primary-600 dark:text-primary-400 mb-1">
-              {job.position}
-            </h3>
+        <div className={job.image ? 'flex flex-col lg:flex-row gap-6 items-start' : ''}>
+          <div className={job.image ? 'flex-1' : ''}>
+            {/* HEADER */}
+            <div className="flex flex-wrap justify-between items-start mb-4">
+              <div>
+                <h3 className="text-xl font-bold text-primary-600 dark:text-primary-400 mb-1">
+                  {job.position}
+                </h3>
 
-            <h4 className="text-lg font-semibold mb-2">
-              {job.companyLink ? (
-                <a
-                  href={job.companyLink}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="hover:text-primary-600"
+                <h4 className="text-lg font-semibold mb-2">
+                  {job.companyLink ? (
+                    <a
+                      href={job.companyLink}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="hover:text-primary-600"
+                    >
+                      {job.company}
+                    </a>
+                  ) : (
+                    job.company
+                  )}
+                </h4>
+              </div>
+
+              <div className="flex flex-col items-end text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center mb-1">
+                  <Calendar size={16} className="mr-1" />
+                  <span>{job.duration}</span>
+                </div>
+                <div className="flex items-center">
+                  <MapPin size={16} className="mr-1" />
+                  <span>{job.location}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* DESCRIPTION */}
+            <p className="text-gray-700 dark:text-gray-300 mb-4">
+              {job.description}
+            </p>
+
+            {/* TECH */}
+            <div className="flex flex-wrap gap-2">
+              {job.technologies.map((tech, i) => (
+                <span
+                  key={i}
+                  className="px-3 py-1 text-sm bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-full"
                 >
-                  {job.company}
-                </a>
-              ) : (
-                job.company
-              )}
-            </h4>
-          </div>
-
-          <div className="flex flex-col items-end text-sm text-gray-600 dark:text-gray-400">
-            <div className="flex items-center mb-1">
-              <Calendar size={16} className="mr-1" />
-              <span>{job.duration}</span>
-            </div>
-            <div className="flex items-center">
-              <MapPin size={16} className="mr-1" />
-              <span>{job.location}</span>
+                  {tech}
+                </span>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* DESCRIPTION */}
-        <p className="text-gray-700 dark:text-gray-300 mb-4">
-          {job.description}
-        </p>
-
-        {/* TECH */}
-        <div className="flex flex-wrap gap-2">
-          {job.technologies.map((tech, i) => (
-            <span
-              key={i}
-              className="px-3 py-1 text-sm bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-full"
-            >
-              {tech}
-            </span>
-          ))}
+          {job.image && (
+            <div className="w-full lg:w-56 xl:w-72 shrink-0">
+              <img
+                src={job.image}
+                alt={job.imageAlt || job.company}
+                className="w-full h-auto rounded-lg object-cover shadow-sm border border-gray-200 dark:border-gray-700"
+              />
+            </div>
+          )}
         </div>
       </div>
     </motion.div>

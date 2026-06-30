@@ -31,7 +31,7 @@ const Projects: React.FC = () => {
     id: 2,
     title: 'HealthCare Solution',
     description: 'A healthcare management web app built with Spring Boot and React for managing patients and appointments.',
-    image: 'https://www.revalton.com/wp-content/uploads/2016/05/vaccination-management-syst-960x750.png',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRh9PK5z2Sp31klX9d1JIBPHzdm6nmnvKc0upjfLE4elA&s=10',
     technologies: ['TypeScript', 'Spring Boot', 'SQL', 'React'],
     github: 'https://github.com/Sami-115667/HealthCare',
     fullDescription: 'HealthCare is a Spring Boot + React application for managing patient data, appointments, and doctor schedules. It includes secure authentication, role-based access control, and a dashboard for managing records. SQL is used for relational data storage and TypeScript ensures strong typing on the frontend.',
