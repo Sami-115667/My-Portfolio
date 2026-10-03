@@ -1,126 +1,159 @@
-import React from 'react';
-import { TypeAnimation } from 'react-type-animation';
-import { FileDown, Send } from 'lucide-react';
-import { motion } from 'framer-motion';
+import {
+  ArrowDown,
+  ArrowDownRight,
+  ArrowRight,
+  ArrowUpRight,
+  Download,
+  Github,
+  Linkedin,
+  MapPin,
+} from "lucide-react";
+import Reveal from "../Reveal";
 
-const Hero: React.FC = () => {
-  const skills = [
-    'Kotlin',
-    1000,
-    'Python',
-    1000,
-    'Firebase',
-    1000,
-    'Spring Boot',
-    1000,
-    'Fastapi',
-    1000,
-    'Flutter',
-    1000,
-    'React',
-    1000,
-    'Machine Learning',
-    1000,
-  ];
-
+export default function Hero() {
   return (
-    <section id="home" className="min-h-screen flex items-center pt-20">
+    <section id="home" className="hero">
       <div className="container">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
-          {/* Profile Image */}
-          <motion.div 
-            className="w-full lg:w-1/2 flex justify-center lg:justify-start"
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-full blur opacity-75"></div>
-              <div className="relative max-w-xs sm:max-w-sm rounded-full overflow-hidden border-4 border-white dark:border-dark-800">
-                <img 
-                        src="/mypic.jpg" 
-                        alt="Profile" 
-                        className="w-full h-auto"
-/>
+        <div className="hero-topline">
+          <span className="availability">
+            <span className="status-dot" />
+            Open to opportunities
+          </span>
+          <span className="mono hero-location">
+            <MapPin size={13} /> DHAKA, BANGLADESH
+          </span>
+        </div>
+        <div className="hero-grid">
+          <Reveal className="hero-copy">
+            <p className="hero-intro">
+              Hi, I’m Sami{" "}
+              <span className="little-spark" aria-hidden="true">
+                ✳
+              </span>
+            </p>
+            <h1>
+              Thoughtful code.
+              <br />
+              Meaningful
+              <br />
+              <span className="accent-text">experiences.</span>
+            </h1>
+            <p className="hero-description">
+              A software engineer turning complex problems into intuitive web,
+              mobile, and AI-powered experiences.
+            </p>
+            <div className="hero-buttons">
+              <a className="button button-primary" href="#projects">
+                Explore my work <ArrowUpRight size={19} />
+              </a>
+              <a
+                className="button button-secondary"
+                href="/resume.pdf"
+                download="Sami-Resume.pdf"
+              >
+                <Download size={17} /> Download résumé
+              </a>
+            </div>
+            <div className="hero-socials">
+              <span className="mono">FIND ME ON</span>
+              <a
+                href="https://github.com/Sami-115667"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Sami on GitHub"
+              >
+                <Github size={19} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/md-shamsur-rahman-sami-0a677b246/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Sami on LinkedIn"
+              >
+                <Linkedin size={19} />
+              </a>
+              <span className="social-divider" />
+              <span className="hero-social-note">
+                Always curious. Always building.
+              </span>
+            </div>
+          </Reveal>
+          <Reveal className="hero-visual" delay={0.15}>
+            <div className="portrait-frame">
+              <div className="portrait-top">
+                <span className="mono">THE HUMAN BEHIND THE CODE</span>
+                <ArrowUpRight size={17} />
+              </div>
+              <div className="portrait-image">
+                <img
+                  src="/mypic.jpg"
+                  alt="Md Shamsur Rahman Sami, software engineer"
+                  width="1008"
+                  height="1008"
+                  fetchPriority="high"
+                />
+                <div className="portrait-caption">
+                  <span>Md Shamsur Rahman Sami</span>
+                  <span className="mono">SOFTWARE ENGINEER</span>
+                </div>
+              </div>
+              <div className="portrait-bottom">
+                <span className="status-dot" />
+                <span>Building with purpose.</span>
+                <span className="mono">&lt;/&gt;</span>
               </div>
             </div>
-          </motion.div>
-          
-          {/* Content */}
-          <motion.div 
-            className="w-full lg:w-1/2 text-center lg:text-left"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.p 
-              className="text-lg text-primary-600 dark:text-primary-400 font-medium mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              Hello, I'm 
-            </motion.p>
-            
-            <motion.h1 
-              className="font-bold mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-            Md Shamsur Rahman Sami
-            </motion.h1>
-            
-            <motion.div 
-              className="mb-6 text-xl md:text-2xl text-gray-700 dark:text-gray-300"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            >
-              <span className="inline-block mr-2">Software Developer | AI Enthusiast | Machine Learning | Full Stack App and Web Developer | AI Trainer</span>
-              <div className="h-0.5 w-16 bg-primary-600 dark:bg-primary-400 my-4 mx-auto lg:mx-0"></div>
-              <div className="flex items-center h-8 text-primary-600 dark:text-primary-400 font-medium justify-center lg:justify-start">
-                <span className="mr-2">I work with</span>
-                <TypeAnimation
-                  sequence={skills}
-                  wrapper="span"
-                  speed={50}
-                  repeat={Infinity}
-                  className="font-semibold"
-                />
+            <div className="hero-sticker">
+              <span aria-hidden="true">✳</span>
+              <div>
+                Engineer by craft.
+                <br />
+                <strong>Problem solver at heart.</strong>
               </div>
-            </motion.div>
-            
-            <motion.div 
-              className="flex flex-wrap gap-4 justify-center lg:justify-start"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
-            >
-              <motion.a 
-                href="/resume.pdf" 
-                className="btn btn-primary"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FileDown className="mr-2" size={20} />
-                Download CV
-              </motion.a>
-              <motion.a 
-                href="#contact" 
-                className="btn btn-outline"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Send className="mr-2" size={20} />
-                Contact Me
-              </motion.a>
-            </motion.div>
-          </motion.div>
+            </div>
+            <div className="hero-coordinate mono" aria-hidden="true">
+              23.8103° N &nbsp; 90.4125° E
+            </div>
+            <ArrowDownRight
+              className="hero-doodle"
+              size={66}
+              strokeWidth={1}
+              aria-hidden="true"
+            />
+          </Reveal>
+        </div>
+        <div className="hero-bottom">
+          <a href="#about" className="scroll-cue">
+            <span className="scroll-icon">
+              <ArrowDown size={16} />
+            </span>
+            <span className="mono">A LITTLE MORE ABOUT ME</span>
+          </a>
+          <span className="hero-bottom-note">
+            From the first idea to the final detail <ArrowRight size={16} />
+          </span>
+        </div>
+      </div>
+      <div className="tech-strip">
+        <div className="container tech-strip-inner">
+          <span className="mono tech-label">MY EVERYDAY TOOLKIT</span>
+          <div className="tech-list">
+            {[
+              "Flutter",
+              "React",
+              "Python",
+              "Spring Boot",
+              "Kotlin",
+              "Firebase",
+            ].map((tech) => (
+              <span key={tech}>
+                <span className="tech-dot" />
+                {tech}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
-};
-
-export default Hero;
+}

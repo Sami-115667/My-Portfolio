@@ -1,262 +1,538 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { ExternalLink, Github, X } from 'lucide-react';
+import { useState } from "react";
+import {
+  ArrowUpRight,
+  ArrowRight,
+  Github,
+  HeartPulse,
+  Network,
+  Plane,
+  GraduationCap,
+  ShoppingBag,
+  Search,
+  Heart,
+  Plus,
+  Activity,
+} from "lucide-react";
+import Reveal from "../Reveal";
+import SectionHeading from "../SectionHeading";
+import Modal from "../Modal";
 
-interface Project {
-  id: number;
+type Category = "All work" | "Mobile" | "Web" | "Systems";
+type Project = {
+  id: string;
   title: string;
+  category: Category;
+  type: string;
   description: string;
-  image: string;
+  detail: string;
   technologies: string[];
-  github: string;
-  //live: string;
-  fullDescription: string;
-}
-
-const Projects: React.FC = () => {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  
- const projects: Project[] = [
+  github?: string;
+  live?: string;
+  preview?: string;
+  period?: string;
+  featured?: boolean;
+  features: string[];
+};
+const projects: Project[] = [
   {
-    id: 1,
-    title: 'Swapno An Commerce App',
-    description: 'A full-featured online shopping app with cart, payment, and admin panel built in Flutter.',
-    image: 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    technologies: ['Flutter', 'Firebase'],
-    github: 'https://github.com/Sami-115667/Swapno-An-Ecommerce-App',
-    fullDescription: 'This e-commerce platform is built with Flutter and Firebase. It features product listings, shopping cart, order management, Stripe payment integration, user authentication, and an admin panel to manage inventory. The UI is responsive and optimized for both Android and iOS devices.',
+    id: "zariban",
+    title: "ZARIBAN",
+    category: "Web",
+    type: "E-COMMERCE WEBSITE",
+    description:
+      "An online clothing store with curated collections, product discovery, and a dedicated shopping experience.",
+    detail:
+      "Built ZARIBAN, an e-commerce website for clothing and everyday essentials. The storefront brings together product categories, new arrivals, best sellers, shopping cart access, and customer accounts.",
+    technologies: ["E-commerce", "Web Application"],
+    live: "https://zariban.zariban-support.workers.dev/",
+    preview: "/zariban-preview.jpg",
+    period: "September – October 2026",
+    featured: true,
+    features: [
+      "Product catalog with categories and curated collections",
+      "New arrivals, featured products, and best sellers",
+      "Shopping cart and customer login / registration",
+    ],
   },
   {
-    id: 2,
-    title: 'HealthCare Solution',
-    description: 'A healthcare management web app built with Spring Boot and React for managing patients and appointments.',
-    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRh9PK5z2Sp31klX9d1JIBPHzdm6nmnvKc0upjfLE4elA&s=10',
-    technologies: ['TypeScript', 'Spring Boot', 'SQL', 'React'],
-    github: 'https://github.com/Sami-115667/HealthCare',
-    fullDescription: 'HealthCare is a Spring Boot + React application for managing patient data, appointments, and doctor schedules. It includes secure authentication, role-based access control, and a dashboard for managing records. SQL is used for relational data storage and TypeScript ensures strong typing on the frontend.',
+    id: "infinity",
+    title: "Infinity Edu-care",
+    category: "Web",
+    type: "COACHING CENTER WEBSITE",
+    description:
+      "A coaching center’s online home, connecting students with programs, batches, teachers, and admission information.",
+    detail:
+      "Built the website for Infinity Edu-care, a coaching center in Chunarughat, Habiganj. It presents academic care for Classes 5–12 and job preparation, with clear access to active batches, faculty profiles, notices, and admission information.",
+    technologies: ["Education", "Web Application"],
+    live: "https://infinity-edu-care.shamsurrahman07052001.workers.dev/",
+    preview: "/infinity-edu-care-preview.jpg",
+    period: "September – October 2026",
+    featured: true,
+    features: [
+      "Academic programs, active batches, and weekly routines",
+      "Faculty profiles, notices, and a campus gallery",
+      "Admission information and direct contact options",
+    ],
   },
   {
-    id: 3,
-    title: 'Networking Project',
-    description: 'A socket programming project built in Python simulating basic network communication.',
-    image: 'https://files.realpython.com/media/Python-Sockets-Tutorial_Watermarked.aebb960a567a.jpg',
-    technologies: ['Python'],
-    github: 'https://github.com/Sami-115667/Networking-Project',
-    fullDescription: 'This project implements core networking concepts such as client-server architecture, socket programming, and data transfer protocols using Python. It simulates reliable communication and includes features like data validation and connection status handling.',
+    id: "swapno",
+    featured: true,
+    title: "Swapno",
+    category: "Mobile",
+    type: "MOBILE COMMERCE",
+    description:
+      "A complete shopping experience, from the first browse to the final checkout.",
+    detail:
+      "An e-commerce application built with Flutter and Firebase, bringing product discovery, shopping, and order management into one mobile experience for Android and iOS.",
+    technologies: ["Flutter", "Firebase", "Stripe"],
+    github: "Swapno-An-Ecommerce-App",
+    features: [
+      "Product listings and a persistent shopping cart",
+      "User authentication and payment integration",
+      "Order management and an admin inventory panel",
+    ],
   },
   {
-    id: 4,
-    title: 'Current-University BD',
-    description: 'An Android app displaying university information, built using Java and Firebase.',
-    image: 'https://students.carleton.ca/wp-content/uploads/2025/04/Campus-From-River.png',
-    technologies: ['Java', 'Firebase', 'XML'],
-    github: 'https://github.com/Sami-115667/Current-UniversityBD',
-    fullDescription: 'Current-University BD is an Android app that displays information about universities in Bangladesh. Built using Java and Firebase Realtime Database, it allows users to search, filter, and view university details with a clean XML-based UI.',
+    id: "healthcare",
+    featured: true,
+    title: "HealthCare",
+    category: "Web",
+    type: "FULL-STACK PLATFORM",
+    description:
+      "Connecting patients, appointments, and care in one organized workspace.",
+    detail:
+      "A healthcare management platform built with Spring Boot and React. A typed frontend and relational database support the workflows of patients, doctors, and administrators.",
+    technologies: ["React", "Spring Boot", "TypeScript", "SQL"],
+    github: "HealthCare",
+    features: [
+      "Patient records and appointment management",
+      "Doctor schedules and administrative dashboards",
+      "Secure authentication with role-based access",
+    ],
   },
   {
-    id: 5,
-    title: 'The Aeroplane Game',
-    description: 'A 2D shooting game built using the SDL library with a MIG-29 fighter jet theme.',
-    image: 'https://media.pocketgamer.com/artwork/na-32252-1606418749/flight-simulator-2d-ios-android-header.jpg',
-    technologies: ['C++', 'SDL Library'],
-    github: 'https://github.com/Sami-115667/The_Aeroplane_Game-MIG-29',
-    fullDescription: 'The Aeroplane Game is a C++ 2D shooting game developed using the SDL library. Players control a MIG-29 fighter jet, navigating through enemy territory and dodging obstacles. The game features sprite animations, sound effects, scoring system, and a responsive game loop.',
+    id: "network",
+    title: "Networking Project",
+    category: "Systems",
+    type: "CLIENT–SERVER SYSTEM",
+    description:
+      "Exploring reliable communication through Python sockets and network protocols.",
+    detail:
+      "A Python implementation of core networking concepts, including client-server communication and data transfer protocols.",
+    technologies: ["Python", "Sockets"],
+    github: "Networking-Project",
+    features: [
+      "Socket-based client-server architecture",
+      "Data transfer and validation",
+      "Connection status handling",
+    ],
+  },
+  {
+    id: "university",
+    title: "Current-University BD",
+    category: "Mobile",
+    type: "ANDROID APPLICATION",
+    description:
+      "Helping students discover and explore universities across Bangladesh.",
+    detail:
+      "An Android application that makes university information easier to find. Java powers the application, with Firebase Realtime Database for university records and XML-based interfaces.",
+    technologies: ["Java", "Firebase", "XML"],
+    github: "Current-UniversityBD",
+    features: [
+      "Searchable university information",
+      "Filters and detailed university profiles",
+      "Firebase Realtime Database integration",
+    ],
+  },
+  {
+    id: "aeroplane",
+    title: "The Aeroplane Game",
+    category: "Systems",
+    type: "2D GAME DEVELOPMENT",
+    description:
+      "A MIG-29 arcade game built around a responsive C++ game loop.",
+    detail:
+      "A 2D shooting game built with C++ and SDL. Players pilot a MIG-29, navigate enemy territory, and dodge obstacles.",
+    technologies: ["C++", "SDL"],
+    github: "The_Aeroplane_Game-MIG-29",
+    features: [
+      "Responsive controls and a real-time game loop",
+      "Sprite animation and sound effects",
+      "Obstacle avoidance and score tracking",
+    ],
   },
 ];
+const filters: Category[] = ["All work", "Mobile", "Web", "Systems"];
 
+function ProjectArtwork({ project }: { project: Project }) {
+  if (project.preview) {
+    return (
+      <div className={"project-art live-project-art art-" + project.id}>
+        <div className="live-preview-bar" aria-hidden="true">
+          <span className="preview-dots">
+            <i />
+            <i />
+            <i />
+          </span>
+          <span>{project.title}</span>
+          <span className="live-preview-status">
+            <span /> Live
+          </span>
+        </div>
+        <img
+          src={project.preview}
+          alt={project.title + " live website homepage"}
+          width={1360}
+          height={920}
+          loading="lazy"
+        />
+      </div>
+    );
+  }
+  if (project.id === "swapno")
+    return (
+      <div className="project-art art-commerce" aria-hidden="true">
+        <div className="art-grid" />
+        <div className="art-wordmark">
+          swapno<span>®</span>
+        </div>
+        <span className="art-caption mono">A LITTLE JOY. DELIVERED.</span>
+        <div className="commerce-orbit" />
+        <div className="phone phone-back">
+          <div className="phone-notch" />
+          <div className="phone-title">
+            Good finds.
+            <br />
+            Great days.
+          </div>
+          <div className="product-shape">
+            <ShoppingBag size={56} strokeWidth={1} />
+          </div>
+          <div className="phone-line" />
+          <div className="phone-line short" />
+          <div className="phone-cta">
+            Add to bag <Plus size={11} />
+          </div>
+        </div>
+        <div className="phone phone-front">
+          <div className="phone-notch" />
+          <div className="phone-nav">
+            <strong>swapno.</strong>
+            <ShoppingBag size={12} />
+          </div>
+          <div className="phone-search">
+            <Search size={10} /> Find something you love
+          </div>
+          <div className="phone-banner">
+            <small>MADE FOR EVERY DAY</small>
+            <strong>
+              Less ordinary.
+              <br />
+              More you.
+            </strong>
+            <span>Explore collection →</span>
+          </div>
+          <div className="phone-section-title">
+            The good stuff <ArrowRight size={10} />
+          </div>
+          <div className="phone-products">
+            <div>
+              <div className="product-icon">
+                <ShoppingBag size={25} />
+              </div>
+              <span>Everyday essentials</span>
+              <b>Discover more</b>
+            </div>
+            <div>
+              <div className="product-icon alt">
+                <Heart size={25} />
+              </div>
+              <span>Your next favorite</span>
+              <b>Made for you</b>
+            </div>
+          </div>
+        </div>
+        <span className="art-footnote mono">INTERFACE CONCEPT</span>
+      </div>
+    );
+  return (
+    <div className="project-art art-health" aria-hidden="true">
+      <div className="art-grid" />
+      <div className="art-wordmark">
+        <HeartPulse size={23} /> healthcare<span>+</span>
+      </div>
+      <span className="art-caption mono">BETTER SYSTEMS. BETTER CARE.</span>
+      <div className="dashboard-preview">
+        <div className="dashboard-sidebar">
+          <HeartPulse size={19} />
+          <span className="sidebar-line selected" />
+          <span className="sidebar-line" />
+          <span className="sidebar-line" />
+          <span className="sidebar-line" />
+        </div>
+        <div className="dashboard-main">
+          <div className="dashboard-top">
+            <span>Care overview</span>
+            <div className="dashboard-avatar">S</div>
+          </div>
+          <p>Welcome back, Doctor.</p>
+          <span className="dashboard-subtitle">
+            A clear view of the day ahead.
+          </span>
+          <div className="dashboard-stats">
+            <div>
+              <span>Patients</span>
+              <strong>128</strong>
+              <small>↑ This month</small>
+            </div>
+            <div>
+              <span>Appointments</span>
+              <strong>24</strong>
+              <small>Today’s schedule</small>
+            </div>
+            <div>
+              <span>Care teams</span>
+              <strong>08</strong>
+              <small>Working together</small>
+            </div>
+          </div>
+          <div className="dashboard-chart">
+            <div>
+              <strong>Patient overview</strong>
+              <span>This week</span>
+            </div>
+            <div className="chart-bars">
+              {[35, 60, 45, 80, 57, 92, 70, 100, 78, 88, 64, 85].map(
+                (height, i) => (
+                  <i key={i} style={{ height: height + "%" }} />
+                ),
+              )}
+            </div>
+          </div>
+          <div className="dashboard-appointment">
+            <span>
+              <Activity size={13} /> Upcoming appointments
+            </span>
+            <span className="appointment-status">On schedule</span>
+          </div>
+        </div>
+      </div>
+      <span className="art-footnote mono">INTERFACE CONCEPT · SAMPLE DATA</span>
+    </div>
+  );
+}
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 0.5, ease: 'easeOut' },
-    },
-  };
-
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+export default function Projects() {
+  const [filter, setFilter] = useState<Category>("All work");
+  const [selected, setSelected] = useState<Project | null>(null);
+  const visible = projects.filter(
+    (project) => filter === "All work" || project.category === filter,
+  );
+  const featured = visible.filter((project) => project.featured);
+  const others = visible.filter((project) => !project.featured);
 
   return (
-    <section id="projects" className="py-20 bg-gray-50 dark:bg-dark-800">
+    <section id="projects" className="section projects-section">
       <div className="container">
-        <div className="section-heading">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
+        <Reveal>
+          <SectionHeading
+            number="03"
+            label="SELECTED WORK"
+            title={
+              <>
+                Ideas made <span className="accent-text">real.</span>
+              </>
+            }
           >
-            Projects
-          </motion.h2>
+            <a
+              href="https://github.com/Sami-115667"
+              target="_blank"
+              rel="noreferrer"
+              className="text-link"
+            >
+              More on GitHub <ArrowUpRight size={17} />
+            </a>
+          </SectionHeading>
+        </Reveal>
+        <p className="projects-intro">
+          30+ projects built. A selection of websites, mobile apps, and systems.
+        </p>
+        <div className="project-toolbar">
+          <div
+            className="project-filters"
+            role="group"
+            aria-label="Filter projects"
+          >
+            {filters.map((item) => (
+              <button
+                key={item}
+                aria-pressed={filter === item}
+                className={filter === item ? "selected" : ""}
+                onClick={() => setFilter(item)}
+              >
+                {item}
+                {item === "All work" && (
+                  <span>{String(projects.length).padStart(2, "0")}</span>
+                )}
+              </button>
+            ))}
+          </div>
+          <span className="mono project-count" aria-live="polite">
+            {String(visible.length).padStart(2, "0")} SELECTED PROJECTS
+          </span>
         </div>
-
-        <motion.div
-          ref={ref}
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12"
-        >
-          {projects.map((project) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              onClick={() => setSelectedProject(project)}
-              variants={itemVariants}
-            />
-          ))}
-        </motion.div>
-
-        {/* Project Modal */}
-        {selectedProject && (
-          <ProjectModal
-            project={selectedProject}
-            onClose={() => setSelectedProject(null)}
-          />
+        {featured.length > 0 && (
+          <div className="featured-projects">
+            {featured.map((project) => (
+              <article className="project-card" key={project.id}>
+                <button
+                  className="project-art-button"
+                  onClick={() => setSelected(project)}
+                  aria-label={"View " + project.title + " project details"}
+                >
+                  <ProjectArtwork project={project} />
+                  <span className="project-art-arrow">
+                    <ArrowUpRight size={23} />
+                  </span>
+                </button>
+                <div className="project-card-content">
+                  <div className="project-meta">
+                    <p className="eyebrow">{project.type}</p>
+                    {project.live && (
+                      <span className="recent-project-badge">Latest work</span>
+                    )}
+                  </div>
+                  <div className="project-title-row">
+                    <h3>
+                      <button onClick={() => setSelected(project)}>
+                        {project.title}
+                      </button>
+                    </h3>
+                    <button
+                      className="icon-button"
+                      aria-label={"View " + project.title + " details"}
+                      onClick={() => setSelected(project)}
+                    >
+                      <ArrowUpRight size={23} />
+                    </button>
+                  </div>
+                  <p>{project.description}</p>
+                  {project.period && (
+                    <p className="project-period">{project.period}</p>
+                  )}
+                  <div className="tags">
+                    {project.technologies.map((tech) => (
+                      <span key={tech}>{tech}</span>
+                    ))}
+                  </div>
+                  {project.live && (
+                    <div className="project-card-actions">
+                      <a
+                        className="button button-primary"
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={"Visit " + project.title + " live website"}
+                      >
+                        Visit live site <ArrowUpRight size={18} />
+                      </a>
+                      <button
+                        className="text-link"
+                        onClick={() => setSelected(project)}
+                      >
+                        Project details <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+        <div className="other-projects">
+          {others.map((project) => {
+            const Icon =
+              project.id === "network"
+                ? Network
+                : project.id === "university"
+                  ? GraduationCap
+                  : Plane;
+            return (
+              <article className="small-project" key={project.id}>
+                <div className="small-project-top">
+                  <Icon size={25} strokeWidth={1.5} />
+                  {project.github && (
+                    <a
+                      className="icon-button"
+                      href={"https://github.com/Sami-115667/" + project.github}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={project.title + " source code on GitHub"}
+                    >
+                      <Github size={18} />
+                    </a>
+                  )}
+                </div>
+                <p className="eyebrow">{project.type}</p>
+                <h3>
+                  <button onClick={() => setSelected(project)}>
+                    {project.title}
+                    <ArrowUpRight size={17} />
+                  </button>
+                </h3>
+                <p>{project.description}</p>
+                <div className="tags">
+                  {project.technologies.map((tech) => (
+                    <span key={tech}>{tech}</span>
+                  ))}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+        {selected && (
+          <Modal
+            titleId="project-dialog-title"
+            onClose={() => setSelected(null)}
+          >
+            <p className="eyebrow">PROJECT OVERVIEW / {selected.type}</p>
+            <h2 id="project-dialog-title">{selected.title}</h2>
+            {selected.period && (
+              <p className="project-period">{selected.period}</p>
+            )}
+            <p className="modal-description">{selected.detail}</p>
+            <h3 className="modal-subtitle">What’s inside</h3>
+            <ul className="feature-list">
+              {selected.features.map((feature) => (
+                <li key={feature}>
+                  <ArrowRight size={15} />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <div className="tags">
+              {selected.technologies.map((tech) => (
+                <span key={tech}>{tech}</span>
+              ))}
+            </div>
+            {(selected.live || selected.github) && (
+              <a
+                className="button button-primary modal-action"
+                href={
+                  selected.live ||
+                  "https://github.com/Sami-115667/" + selected.github
+                }
+                target="_blank"
+                rel="noreferrer"
+              >
+                {!selected.live && <Github size={18} />}
+                {selected.live ? "Visit live site" : "Explore the source"}{" "}
+                <ArrowUpRight size={17} />
+              </a>
+            )}
+          </Modal>
         )}
       </div>
     </section>
   );
-};
-
-interface ProjectCardProps {
-  project: Project;
-  onClick: () => void;
-  variants: any;
 }
-
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, onClick, variants }) => {
-  return (
-    <motion.div
-      variants={variants}
-      className="bg-white dark:bg-dark-700 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
-      whileHover={{ y: -5 }}
-    >
-      <div className="h-48 overflow-hidden">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-        />
-      </div>
-      <div className="p-6 flex flex-col flex-grow">
-        <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-        <p className="text-gray-600 dark:text-gray-400 mb-4 flex-grow">{project.description}</p>
-        <div className="flex flex-wrap gap-2 mb-4">
-          {project.technologies.slice(0, 3).map((tech, index) => (
-            <span
-              key={index}
-              className="px-2 py-1 text-xs bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-full"
-            >
-              {tech}
-            </span>
-          ))}
-          {project.technologies.length > 3 && (
-            <span className="px-2 py-1 text-xs bg-gray-100 dark:bg-dark-600 text-gray-700 dark:text-gray-300 rounded-full">
-              +{project.technologies.length - 3}
-            </span>
-          )}
-        </div>
-        <button
-          onClick={onClick}
-          className="w-full py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md transition-colors duration-300"
-        >
-          View Details
-        </button>
-      </div>
-    </motion.div>
-  );
-};
-
-interface ProjectModalProps {
-  project: Project;
-  onClose: () => void;
-}
-
-const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-      onClick={onClose}
-    >
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-        className="bg-white dark:bg-dark-700 rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="relative h-64 overflow-hidden">
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover"
-          />
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors duration-300"
-          >
-            <X size={20} />
-          </button>
-        </div>
-        <div className="p-6">
-          <h2 className="text-2xl font-bold mb-2">{project.title}</h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">{project.fullDescription}</p>
-          
-          <h3 className="text-lg font-semibold mb-2">Technologies Used</h3>
-          <div className="flex flex-wrap gap-2 mb-6">
-            {project.technologies.map((tech, index) => (
-              <span
-                key={index}
-                className="px-3 py-1 text-sm bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-full"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-          
-          <div className="flex flex-wrap gap-4">
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-md transition-colors duration-300"
-            >
-              <Github className="mr-2" size={18} />
-              GitHub Repository
-            </a>
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md transition-colors duration-300"
-            >
-              <ExternalLink className="mr-2" size={18} />
-              Live Demo
-            </a>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-};
-
-export default Projects;

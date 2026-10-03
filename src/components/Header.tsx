@@ -1,119 +1,129 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Moon, Sun } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
-import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
+import { useTheme } from "../context/useTheme";
 
-const Header: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const navigation = [
+  { name: "About", href: "#about" },
+  { name: "Experience", href: "#experience" },
+  { name: "Work", href: "#projects" },
+  { name: "Contact", href: "#contact" },
+];
+
+export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive] = useState("");
   const { theme, toggleTheme } = useTheme();
-  
-  const navigation = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Experience', href: '#experience' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Education', href: '#education' },
-    { name: 'Contact', href: '#contact' },
-  ];
+  const menuButton = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive("#" + entry.target.id);
+        });
+      },
+      { rootMargin: "-15% 0px -60% 0px" },
+    );
+    document
+      .querySelectorAll("main > section[id]")
+      .forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        menuButton.current?.focus();
+      }
+    };
+    const onResize = () => {
+      if (window.innerWidth > 760) setMenuOpen(false);
+    };
+    document.addEventListener("keydown", onEscape);
+    window.addEventListener("resize", onResize);
+    return () => {
+      document.removeEventListener("keydown", onEscape);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [menuOpen]);
+
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      isScrolled ? 'bg-white/90 dark:bg-dark-900/90 backdrop-blur-sm shadow-md py-3' : 'bg-transparent py-5'
-    }`}>
-      <div className="container flex items-center justify-between">
-        <motion.a 
-          href="#home" 
-          className="text-xl font-bold text-primary-600 dark:text-primary-400"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
+    <header className="site-header">
+      <div className="container header-inner">
+        <a
+          href="#home"
+          className="wordmark"
+          aria-label="Sami, back to home"
+          onClick={() => setMenuOpen(false)}
         >
-          Portfolio
-        </motion.a>
-        
-        {/* Desktop Navigation */}
-        <motion.nav 
-          className="hidden md:flex items-center space-x-8"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          {navigation.map((item, index) => (
-            <motion.a
-              key={item.name}
+          sami<span className="wordmark-dot">.</span>
+          <span className="wordmark-slash">/</span>
+          <span className="wordmark-role">software engineer</span>
+        </a>
+        <nav className="desktop-nav" aria-label="Main navigation">
+          {navigation.map((item) => (
+            <a
+              key={item.href}
               href={item.href}
-              className="text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-300"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 + index * 0.1 }}
+              className={active === item.href ? "active" : ""}
+              aria-current={active === item.href ? "location" : undefined}
             >
               {item.name}
-            </motion.a>
+            </a>
           ))}
-          <motion.button
-            onClick={toggleTheme}
-            className="p-2 rounded-full bg-gray-100 dark:bg-dark-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors duration-300"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          </motion.button>
-        </motion.nav>
-        
-        {/* Mobile Menu Button */}
-        <div className="flex items-center md:hidden">
-          <motion.button
-            onClick={toggleTheme}
-            className="p-2 mr-2 rounded-full bg-gray-100 dark:bg-dark-700 text-gray-700 dark:text-gray-300"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          </motion.button>
+        </nav>
+        <div className="header-actions">
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-md text-gray-700 dark:text-gray-300"
+            className="icon-button theme-toggle"
+            onClick={toggleTheme}
+            aria-label={
+              "Switch to " + (theme === "dark" ? "light" : "dark") + " mode"
+            }
           >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+          <a
+            href="mailto:shamsurrahman07052001@gmail.com"
+            className="header-contact"
+          >
+            Let’s talk <ArrowUpRight size={16} />
+          </a>
+          <button
+            ref={menuButton}
+            className="icon-button menu-toggle"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
-        
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <motion.div 
-            className="absolute top-full left-0 right-0 bg-white dark:bg-dark-800 shadow-lg md:hidden"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <nav className="container py-4 flex flex-col space-y-4">
-              {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-700 rounded-md"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {item.name}
-                </a>
-              ))}
-            </nav>
-          </motion.div>
-        )}
       </div>
+      {menuOpen && (
+        <nav
+          id="mobile-navigation"
+          className="mobile-nav container"
+          aria-label="Mobile navigation"
+        >
+          {navigation.map((item, index) => (
+            <a
+              key={item.href}
+              href={item.href}
+              onClick={() => setMenuOpen(false)}
+            >
+              <span className="mono">0{index + 1}</span>
+              {item.name}
+              <ArrowUpRight size={18} />
+            </a>
+          ))}
+          <a href="/resume.pdf" download>
+            Download résumé <ArrowUpRight size={18} />
+          </a>
+        </nav>
+      )}
     </header>
   );
-};
-
-export default Header;
+}

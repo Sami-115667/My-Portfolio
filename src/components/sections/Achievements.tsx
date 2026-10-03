@@ -1,107 +1,82 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Trophy } from 'lucide-react';
-import { useInView } from 'react-intersection-observer';
+import { ArrowUpRight, Award } from "lucide-react";
+import { useState } from "react";
+import Reveal from "../Reveal";
+import Modal from "../Modal";
 
-interface Achievement {
-  id: number;
-  title: string;
-  organization: string;
-  date: string;
-  description: string;
-  image: string;
-}
-
-const achievements: Achievement[] = [
+const achievements = [
   {
-    id: 1,
-    title: 'Completed Workshop & Received Certificate',
-    organization: 'Vice Chancellor of Dhaka University',
-    date: 'June 2024',
+    title: "BD App Ideathon finalist",
+    organization: "Robi Axiata Limited",
+    date: "2024",
     description:
-      'Successfully completed a workshop and received a certificate from the Vice Chancellor of Dhaka University.',
-    image: '/llmworkshop.jpeg',
+      "Presented Expense Fusion, an app concept selected as a finalist in the BD App Ideathon.",
+    image: "/idea.jpeg",
   },
   {
-  id: 2,
-  title: 'BD App Ideathon Finalist',
-  organization: 'Robi Axiata Limited',
-  date: '2024',
-  description: 'Finalist in BD App Ideathon with the project "Expense Fusion" app, presented by Robi.',
-  image:
-    '/idea.jpeg',
-},
+    title: "Learning, recognized.",
+    organization: "University of Dhaka",
+    date: "JUNE 2024",
+    description:
+      "Completed a technical workshop and received a certificate from the Vice Chancellor of the University of Dhaka.",
+    image: "/llmworkshop.jpeg",
+  },
 ];
 
-const Achievements: React.FC = () => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-
+export default function Achievements() {
+  const [selected, setSelected] = useState<
+    (typeof achievements)[number] | null
+  >(null);
   return (
-    <section id="achievements" className="py-20 bg-gray-50 dark:bg-dark-800">
+    <section id="achievements" className="section achievements-section">
       <div className="container">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-          className="section-heading"
-        >
-          Achievements
-        </motion.h2>
-
-        <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8"
-        >
-          {achievements.map((achievement) => (
-            <AchievementCard key={achievement.id} achievement={achievement} />
+        <Reveal>
+          <div className="recognition-heading">
+            <p className="eyebrow">
+              <Award size={15} /> MOMENTS THAT MATTER
+            </p>
+            <h2>A few milestones along the way.</h2>
+          </div>
+        </Reveal>
+        <div className="achievement-grid">
+          {achievements.map((item) => (
+            <Reveal className="achievement-card" key={item.title}>
+              <button
+                className="achievement-image"
+                onClick={() => setSelected(item)}
+                aria-label={"View " + item.title + " photo"}
+              >
+                <img
+                  src={item.image}
+                  alt={item.title + " — " + item.organization}
+                  loading="lazy"
+                />
+                <span className="achievement-image-link">
+                  <ArrowUpRight size={21} />
+                </span>
+              </button>
+              <div className="achievement-content">
+                <p className="eyebrow">
+                  {item.date} / {item.organization}
+                </p>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+              </div>
+            </Reveal>
           ))}
-        </motion.div>
+        </div>
+        {selected && (
+          <Modal
+            className="photo-modal"
+            titleId="achievement-dialog-title"
+            onClose={() => setSelected(null)}
+          >
+            <h2 className="photo-title" id="achievement-dialog-title">
+              {selected.title}
+            </h2>
+            <img src={selected.image} alt={selected.title} />
+          </Modal>
+        )}
       </div>
     </section>
   );
-};
-
-const AchievementCard: React.FC<{ achievement: Achievement }> = ({ achievement }) => (
-  <div className="w-full">
-    <div className="bg-white dark:bg-dark-700 rounded-xl shadow-md overflow-hidden flex flex-col">
-      
-      {/* Image Top */}
-      <div className="relative w-full">
-        <img
-          src={achievement.image}
-          alt={achievement.title}
-          className="w-full h-38 object-cover"
-        />
-
-        <div className="absolute top-4 left-4 bg-primary-600 text-white p-2 rounded-full">
-          <Trophy size={20} />
-        </div>
-      </div>
-
-      {/* Content Bottom */}
-      <div className="p-6">
-        <span className="text-sm text-primary-600 dark:text-primary-400 font-medium mb-1 block">
-          {achievement.date}
-        </span>
-
-        <h3 className="text-xl font-bold mb-2">
-          {achievement.title}
-        </h3>
-
-        <h4 className="text-lg text-gray-700 dark:text-gray-300 mb-4">
-          {achievement.organization}
-        </h4>
-
-        <p className="text-gray-600 dark:text-gray-400">
-          {achievement.description}
-        </p>
-      </div>
-    </div>
-  </div>
-);
-
-export default Achievements;
+}

@@ -1,13 +1,38 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <title>Personal Portfolio</title>
+    <meta name="theme-color" content="#141613" />
+    <meta
+      name="description"
+      content="Md Shamsur Rahman Sami — software engineer in Dhaka, Bangladesh. Explore thoughtful web, mobile, and AI projects, professional experience, and the ideas behind the code."
+    />
+    <meta property="og:title" content="Sami — Software Engineer" />
+    <meta
+      property="og:description"
+      content="Thoughtful code. Meaningful experiences. Web, mobile, and AI projects by Md Shamsur Rahman Sami."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Manrope:wght@400;500;600;650;700;750;800&family=IBM+Plex+Mono:wght@400;450;500&display=swap"
+      rel="stylesheet"
+    />
+    <title>Sami — Software Engineer</title>
+    <script>
+      try {
+        const savedTheme = localStorage.getItem("theme");
+        document.documentElement.classList.toggle(
+          "dark",
+          savedTheme !== "light",
+        );
+        document.documentElement.style.colorScheme =
+          savedTheme === "light" ? "light" : "dark";
+      } catch {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
